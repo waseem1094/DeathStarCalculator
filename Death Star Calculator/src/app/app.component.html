@@ -1,0 +1,81 @@
+<!-- Toolbar -->
+<div class="toolbar" role="banner">
+  <img class="death-star-logo" width="40" alt="Death Star" src="../assets/images/death-star-icon-18-256.png">
+  <div class="row justify-content-center" style="width: 100%;">Death Star Calculator</div>
+</div>
+
+<!-- calculations list -->
+<ng-container *ngIf="isNew == 1">
+  <div class="row justify-content-center mt-4">
+    <!-- New Calculation-->
+    <button type="button" class="btn btn-primary" (click)="isNew = 2">Neue Berechnung</button> 
+  </div>
+
+  <div class="row justify-content-center mt-4">
+    <h4>Bisherige Berechnungen</h4>
+  </div>
+  <div class="row justify-content-center">
+    <div class="co-lg-8">
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th scope="col">Personen</th>
+            <th scope="col">Volumen der Planeten</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let planet of informationList">
+            <th scope="row">{{planet.names}}</th>
+            <td>{{planet.volume}} km<sup>3</sup></td>
+          </tr>
+          <tr *ngIf="informationList==undefined || (informationList!=undefined && informationList.length==0)">
+            <th scope="row" colspan="12">No Result Found!</th>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</ng-container>
+
+<!-- New enemy work -->
+<ng-container *ngIf="isNew == 2">
+  <div class="row mt-4 justify-content-center">
+    <div class="col-sm-6" style="margin-top:20px">
+      <ng-select [items]="peoples" (search)="onSearch($event)" bindLabel="name" bindValue="name" [multiple]="true"
+        placeholder="Select enemies" [(ngModel)]="enemiesList">
+      </ng-select>
+    </div>
+  </div>
+
+  <div class="row justify-content-center">
+    <h4>Enemies List</h4>
+  </div>
+  <div class="row justify-content-center">
+    <div class="co-lg-6">
+      <ul>
+        <li *ngFor="let enemy of enemiesList">
+          {{enemy}}
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="row justify-content-center mt-4">
+    <!-- Calculate -->
+    <button
+      [disabled]="enemiesList == undefined || isLoading == true || (enemiesList!=undefined && enemiesList.length==0)"
+      type="button" class="btn btn-primary" (click)="onCalculateSum()">Berechnen</button>
+  </div>
+
+  <div class="row justify-content-center mt-4" *ngIf="calculatedVolume">
+    Total Calculated Volume is:&nbsp; <b>{{calculatedVolume}}</b> &nbsp; cubic kilometers 
+  </div>
+
+  <div class="row justify-content-center mt-4">
+    <!-- Accept -->
+    <button
+      [disabled]="enemiesList == undefined || isLoading == true || (enemiesList!=undefined && enemiesList.length==0)"
+      type="button" class="btn btn-primary" (click)="onAccept()">Übernehmen</button>
+  </div>
+</ng-container>
+<router-outlet></router-outlet>
